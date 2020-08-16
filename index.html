@@ -1,0 +1,257 @@
+<html>
+
+<head>
+    <script type="text/javascript">
+        const colors = {
+            gray: "#2F3437",
+            white: "#FFFFFF",
+            grayblack: "rgba(255, 255, 255, 0.9)",
+            graywhite: "rgba(0, 0, 0, 0.9)"
+        };
+        const theme = {
+            darkBackground: colors.gray,
+            lightBackground: colors.white,
+            darkText: colors.grayblack,
+            lightText: colors.graywhite
+        };
+        function setTheme() {
+            //console.log(localStorage.getItem('themeused'));
+            if (localStorage.getItem('themeused')) {
+                if (localStorage.getItem('themeused') == "light") {
+                    switchToLight();
+                } else if (localStorage.getItem('themeused') == "dark") {
+                    //console.log("In Dark")
+                    switchToDark();
+                }
+            } else {
+                    switchToLight();
+            }
+            //console.log("in change bg");
+        }
+
+        function display_c() {
+            var refresh = 5000; // Refresh rate in milli seconds
+            mytime = setTimeout('display_ct()', refresh)
+        }
+
+        function display_ct() {
+            var d = new Date()
+            var d = new Date()
+            hrs = d.getHours()
+            hrs = ("0" + hrs).slice(-2);
+            mins = d.getMinutes()
+            mins = ("0" + mins).slice(-2);
+            var localtime = hrs + ":" + mins
+            document.getElementById('ct').innerHTML = localtime;
+            //console.log('display_ct');
+            //console.log(localtime);
+            display_c();
+        }
+        function stripLeadingZerosDate(dateStr) {
+            return dateStr.split('-').reduce(function (date, datePart) {
+                return date += parseInt(datePart) + '-'
+            }, '').slice(0, -1);
+        }
+
+        function getOrdinalNum(n) {
+            return n + (n > 0 ? ['th', 'st', 'nd', 'rd'][(n > 3 && n < 21) || n % 10 > 3 ? 0 : n % 10] : '');
+        }
+
+        function display_dt() {
+            var refresh = 5000; // Refresh rate in milli seconds
+            mytime = setTimeout('display_curr_dt()', refresh)
+        }
+        function display_curr_dt() {
+            const date = new Date()
+            const dateTimeFormat = new Intl.DateTimeFormat('en', { year: 'numeric', month: 'long', day: '2-digit' })
+            var [{ value: month }, , { value: day }, , { value: year }] = dateTimeFormat.formatToParts(date)
+            var d1 = new Date();
+            var weekday = new Array(7);
+            weekday[0] = "Sunday";
+            weekday[1] = "Monday";
+            weekday[2] = "Tuesday";
+            weekday[3] = "Wednesday";
+            weekday[4] = "Thursday";
+            weekday[5] = "Friday";
+            weekday[6] = "Saturday";
+
+            var n = weekday[d1.getDay()];
+            day = stripLeadingZerosDate(day);
+            day = getOrdinalNum(day);
+            //console.log(`${n}, ${day} ${month} ${year}`)
+            //console.log('display_curr_dt');
+            var fmtdDate = `${n}, ${day} ${month} ${year}`;
+            //console.log(fmtdDate);
+            document.getElementById('dt').innerHTML = fmtdDate;
+            display_dt();
+        }
+        function display_dt_tm() {
+            display_ct();
+            display_curr_dt();
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            async function updateQuote() {
+                // Fetch a random quote from the Quotable API
+                const response = await fetch("https://api.quotable.io/random");
+                const data = await response.json();
+                if (response.ok) {
+                    // Update DOM elements
+                    const quote = data.content;
+                    const cite = `- ${data.author}`;
+                    document.getElementById('qt').innerHTML = quote;
+                    document.getElementById('at').innerHTML = cite;
+                } else {
+                    quote.textContent = "An error occured";
+                    console.log(data);
+                }
+            }
+
+            // call updateQuote once when page loads
+            updateQuote();
+            setInterval(updateQuote, 300000);
+
+        });
+        function switchToDark() {
+            document.body.style.background = theme.darkBackground;
+            document.getElementById("info").style.color = theme.darkText;
+            document.getElementById("dt").style.color = theme.darkText;
+            document.getElementById("ct").style.color = theme.darkText;
+            document.getElementById("sep").style.color = theme.darkText;
+            document.getElementById("qt").style.color = theme.darkText;
+            document.getElementById("at").style.color = theme.darkText;
+            localStorage.setItem('themeused', "dark");
+            //console.log('switchToDark');
+        }
+        function switchToLight() {
+            document.body.style.background = theme.lightBackground;
+            document.getElementById("info").style.color = theme.lightText;
+            document.getElementById("dt").style.color = theme.lightText;
+            document.getElementById("ct").style.color = theme.lightText;
+            document.getElementById("sep").style.color = theme.lightText;
+            document.getElementById("qt").style.color = theme.lightText;;
+            document.getElementById("at").style.color = theme.lightText;
+            localStorage.setItem('themeused', "light");
+            //console.log('switchToLight');
+        }
+
+        document.addEventListener('readystatechange', function () {
+            if (document.readyState === "complete") {
+                setTheme();
+                display_dt_tm();
+            }
+        });
+
+    </script>
+    <style>
+        div {
+            text-align: center;
+        }
+
+        #info {
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+        }
+
+        #dt {
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+        }
+
+        #ct {
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        #sep {
+            text-align: center;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 15px;
+        }
+
+        #qt {
+            text-align: center;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 15px;
+        }
+
+        #at {
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+            font-size: 12px;
+            font-style: italic
+        }
+
+        .buttondivouter {
+            position: relative;
+            width: 300px;
+            height: 35px;
+            margin: 0 auto;
+            float: right;
+            opacity: 1;            
+            transition: 3s;        
+          
+        }
+
+        .darkbuttonoverlap {
+            position: absolute;
+            z-index: 2;
+            height: 30px;
+            width: 80px;            
+            top: 4px;
+            left: 180px;
+            opacity: 0;
+            transition: 3s;            
+        }
+
+        .lightbuttonoverlap {
+            position: absolute;
+            z-index: 2;
+            height: 30px;
+            width: 80px;
+            top: 4px;
+            left: 80px;
+            opacity: 0;
+            transition: 3s;
+        }
+
+        .buttondivouter:hover .darkbuttonoverlap {
+            display: block;
+            opacity: 1;            
+        }
+
+        .buttondivouter:hover .lightbuttonoverlap {
+            display: block;
+            opacity: 1;
+        }
+      
+    </style>
+</head>
+
+<body>
+
+    <div>
+        <span id="info">Welcome <span style="font-style:italic;font-weight:bold">Nitin</span>, it is</span>
+        <span id='dt'></span>
+        <br><br>
+        <span id='ct'></span><br>
+        <span id="sep">--</span><br>
+    </div><br>
+
+
+    <div>
+        <span id="qt"></span><br>
+        <span id="at"></span>
+    </div>
+
+    <div class="buttondivouter">
+        <button class="darkbuttonoverlap" style="float: right;" onclick="switchToDark()">Dark</button>
+        <button class="lightbuttonoverlap" style="float: right;" onclick="switchToLight()">Light</button>
+    </div>
+
+</body>
+
+</html>
