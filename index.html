@@ -24,7 +24,7 @@
                     switchToDark();
                 }
             } else {
-                    switchToLight();
+                switchToLight();
             }
             //console.log("in change bg");
         }
@@ -142,6 +142,8 @@
         });
 
     </script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <style>
         div {
             text-align: center;
@@ -191,20 +193,20 @@
             height: 35px;
             margin: 0 auto;
             float: right;
-            opacity: 1;            
-            transition: 3s;        
-          
+            opacity: 1;
+            transition: 3s;
+
         }
 
         .darkbuttonoverlap {
             position: absolute;
             z-index: 2;
             height: 30px;
-            width: 80px;            
+            width: 80px;
             top: 4px;
             left: 180px;
             opacity: 0;
-            transition: 3s;            
+            transition: 3s;
         }
 
         .lightbuttonoverlap {
@@ -220,38 +222,57 @@
 
         .buttondivouter:hover .darkbuttonoverlap {
             display: block;
-            opacity: 1;            
+            opacity: 1;
         }
 
         .buttondivouter:hover .lightbuttonoverlap {
             display: block;
             opacity: 1;
         }
-      
     </style>
+
 </head>
 
 <body>
+    <div class="container">
+        <div class="row mx-auto">
+            <div class="col my-1">
+                <span id="info">Welcome <span style="font-style:italic;font-weight:bold">Nitin</span>, it is
+                </span><span id='dt'></span>
+            </div>
+        </div>
 
-    <div>
-        <span id="info">Welcome <span style="font-style:italic;font-weight:bold">Nitin</span>, it is</span>
-        <span id='dt'></span>
-        <br><br>
-        <span id='ct'></span><br>
-        <span id="sep">--</span><br>
-    </div><br>
+        <div class="row mx-auto my-1">
+            <div class="col my-1">
+                <span id='ct'></span>
+            </div>
+
+        </div>
 
 
-    <div>
-        <span id="qt">loading...</span><br>
-        <span id="at"></span>
+        <div class="row mx-auto">
+            <div class="col">
+                <span id="sep">--</span>
+            </div>
+
+        </div>
+
+        <div class="row mx-auto mt-3">
+            <div class="col">
+                <span id="qt">loading...</span><br>
+                <span id="at"></span>
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="buttondivouter">
-        <button class="darkbuttonoverlap" style="float: right;" onclick="switchToDark()">Dark</button>
-        <button class="lightbuttonoverlap" style="float: right;" onclick="switchToLight()">Light</button>
+    <div class="row mx-auto">
+        <div class="buttondivouter">
+            <button type="button" class="darkbuttonoverlap" style="float: right;" onclick="switchToDark()">Dark</button>
+            <button class="lightbuttonoverlap" style="float: right;" onclick="switchToLight()">Light</button>
+        </div>
     </div>
-
 </body>
 
 </html>
